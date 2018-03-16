@@ -306,11 +306,20 @@
             }
             path=m;
             Rap.global_router.page=path.join('/');
-            var modName=path.join('_');
+            var as=routers[ Rap.global_router.page];
+            if(as){
+                if(isFunction(as)){
+                    as(Rap.global_router.query,Rap.global_router.search);
+                }else{
+                    Rap.global_router.page=as;
+                }
+                return;
+            }
+            var modName=Rap.global_router.page.split('/').join('_');
             if(Vue.component(modName)){
                 Rap.onViewChangeCallBack(modName);
             }else{
-                this.loadMod(path.join('/'));
+                this.loadMod(Rap.global_router.page);
                 Rap.onViewChangeCallBack(modName);
             }
         },
@@ -497,15 +506,7 @@
                 Rap.global_router.search.push(value);
             }
 
-            var as=routers[hash];
-            if(as){
-                if(isFunction(as)){
-                    as(Rap.global_router.query,Rap.global_router.search);
-                }else{
-                    hash=as;
-                }
-                return;
-            }
+
             Rap.loadUrl(hash);
         },
         onViewChangeCallBack:null,
