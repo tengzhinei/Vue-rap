@@ -1,0 +1,51 @@
+<style>
+    .test{
+        backgroud:red;
+    }
+</style>
+<template>
+    <div>
+        <div class="btn-group" role="group" aria-label="...">
+            <a href="#test/page5" class="btn btn-default">地址1</a>
+            <a href="#test/1/page5" class="btn btn-default">地址2</a>
+            <a href="#test/2/page5?name=tengzhinei" class="btn btn-default">地址3</a>
+            <a href="#test/2111/@tengzhinei/page5/1212"  class="btn btn-default">地址4</a>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+               init方法被调用{{count}}次
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>路由信息 this.router</p>
+                <ul>
+                    <li>page : {{router.page}}</li>
+                    <li>hash : {{router.hash}}</li>
+                    <li>query : {{router.query}}</li>
+                    <li>search : {{router.search}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    //这里定义组件
+    Rap.define({
+
+        data: function(){
+            return {
+                count:0
+            }
+        },
+        created:function () {
+
+        },
+        init:function (query,search) {
+            console.log(query);
+            console.log(search);
+            this.count++;
+        },methods:{
+        }
+    })
+</script>

@@ -1,0 +1,28 @@
+<style>
+    .test{
+        backgroud:red;
+    }
+</style>
+<template>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            页面2
+            <test_child></test_child>
+        </div>
+    </div>
+</template>
+<script>
+    //这里定义组件
+    Rap.define(['child'],{
+        data: function(){
+            return {
+            }
+        },
+        created:function () {
+
+        },
+        init:function () {
+        },methods:{
+        }
+    })
+</script>

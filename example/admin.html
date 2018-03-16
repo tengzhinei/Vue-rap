@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-Equiv="Cache-Control" Content="no-cache" />
+    <meta http-Equiv="Pragma" Content="no-cache" />
+    <meta http-Equiv="Expires" Content="0" />
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+<body>
+
+<div id="app" v-cloak >
+    <!--childView是固定值-->
+    <component v-bind:is="childView">
+    </component>
+</div>
+</body>
+<!--引用 vue-rap文件-->
+<script src="/rap.js"></script>
+
+<script>
+    //代码写在onload里防止阻塞页面渲染
+    window.onload=function() {
+        //debug模式
+        Rap.debug = true;
+        Rap.default_page='test/default';
+        //定义应用版本
+        Rap.appVersion(1);
+        Rap.compVersion("test_page6",1);
+        Rap.loadCss([
+                'bootstrap.3.3.7.min.css'
+        ]);
+        //加载依赖脚本
+        Rap.loadScript([
+            "vue.2.5.13.js"
+        ]);
+        //注册Rap
+        Vue.use(Rap);
+        //创建根控制器
+        new Vue({
+            el: '#app',
+            data: function () {
+
+            },
+            watch: {},
+            //注意需要mixins下
+            mixins: [Rap.MainView]
+        });
+    }
+</script>
+
+</html>

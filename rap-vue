@@ -1,0 +1,107 @@
+<?php
+/**
+ * 南京灵衍信息科技有限公司
+ * User: jinghao@duohuo.net
+ * Date: 18/2/4
+ * Time: 下午10:08
+ */
+$base=$argv[1];
+$dir=$argv[2];
+$config=[
+    'base'=>$base,
+    'dir'=>$dir,
+    'sub'=>true
+];
+$content="";
+$content=buildDir(getcwd()."/".$config['base']."/".$config["dir"],$content);
+file_put_contents(getcwd().'/'.$config['base'].'/rap-all.js',$content);
+require 'jsmin.php';
+$content=JSMin::minify(file_get_contents(getcwd().'/'.$config['base'].'/rap-all.js',$content));
+file_put_contents(getcwd().'/'.$config['base'].'/rap-all.min.js',$content);
+
+
+function buildDir($dir,&$content){
+    if(is_dir($dir)){
+        $files = scandir($dir);
+        foreach ($files as $file_name) {
+            if(is_dir($dir.'/'.$file_name)){
+                if($file_name==='.'||$file_name==='..')continue;
+                $content.=buildDir($dir.'/'.$file_name,$content);
+            }else if(is_file($dir.'/'.$file_name)){
+                if(strpos($file_name,".html")==(strlen($file_name)-5)){
+                    $file=$dir.'/'.$file_name;
+                    $js_dir=str_replace(getcwd(),"",$dir);
+                    $js_dir=str_replace('/'.$GLOBALS['config']['base']."/","",$js_dir."/");
+                    $name=$js_dir.$file_name;
+                    $name=str_replace(".html","",$name);
+                    $name=implode('_', explode("/",$name));
+                    $content.=buildFile($js_dir,$name,$file);
+                }
+            }
+        }
+    }
+    return $content;
+}
+
+function buildFile($dir,$name,$file){
+    $content = file_get_contents($file);
+    $po=strpos($content,"<template");
+    if($po===false){
+        return "";
+    }
+    $po=strpos($content,">",$po);
+    $end=strpos($content,"</template");
+    $template=trim(substr($content,$po+1,$end-$po-1));
+
+    $po=strpos($content,"<style");
+    $po=strpos($content,">",$po);
+    $end=strpos($content,"</style");
+    $style=trim(substr($content,$po+1,$end-$po-1));
+
+    $po=strpos($content,"<script");
+    $po=strpos($content,">",$po);
+    $end=strpos($content,"</script");
+    $script=trim(substr($content,$po+1,$end-$po-1));
+    $template=compress_html($template);
+    $data=[
+        "template"=>$template,
+        "style"=>$style,
+        "dir"=>$dir,
+        "name"=>$name
+    ];
+    $m=$data;
+    $data=json_encode($data);
+    $txt = <<<EOF
+(function () {
+     var data= $data;
+     $script;
+    Rap.\$create(data.dir,data.name,data.style,data.template);
+})();
+
+EOF;
+    return $txt;
+}
+
+
+function compress_html($string) {
+    $string = str_replace("\r\n", '', $string); //清除换行符
+    $string = str_replace("\n", '', $string); //清除换行符
+    $string = str_replace("\t", '', $string); //清除制表符
+    $pattern = array (
+        "/> *([^ ]*) *</", //去掉注释标记
+        "/<!--[\\w\\W\r\\n]*?-->/",
+        "/\" /",
+        "/ \"/",
+        "'/\*[^*]*\*/'"
+    );
+    $replace = array (
+        ">\\1<",
+        "",
+        "\"",
+        "\"",
+        ""
+    );
+    return preg_replace($pattern, $replace, $string);
+}
+
+

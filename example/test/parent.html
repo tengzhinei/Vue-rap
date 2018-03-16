@@ -1,0 +1,30 @@
+<style>
+    .test{
+        backgroud:red;
+    }
+</style>
+<template>
+    <div>
+        <ul class="nav nav-tabs">
+            <li role="presentation" :class="{active:router.page=='test/page3'}"><a href="#test/page3">Tab(页面3)</a></li>
+            <li role="presentation"  :class="{active:router.page=='test/page4'}"><a href="#test/page4">Tab(页面4)</a></li>
+        </ul>
+        <component v-bind:is="childView">
+        </component>
+    </div>
+</template>
+<script>
+    //这里定义组件
+    Rap.define({
+        data: function(){
+            return {
+            }
+        },
+        created:function () {
+
+        },
+        init:function () {
+        },methods:{
+        }
+    })
+</script>

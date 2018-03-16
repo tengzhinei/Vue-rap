@@ -1,2 +1,17 @@
-# Vue-rap
-Vue-rap 可以在不使用大量前端工具(如npm,webpack,Browserify等)的情况下快速构建基于 Vue 的大型单页面应用
+###  概述
+
+
+Vue-rap 可以在不使用大量前端工具(如npm,webpack,Browserify等)的情况下快速构建基于 Vue 的大型单页面应用;
+
+### 优点
+
+
+
+* 依赖小(只需要引用 vue 就可以了),学习成本低,上手快
+* vue-rap拥有类似 .vue 的单页面组件;
+* vue-rap拥有可以方便使用的路由系统,路由秉承约定大约配置,可以快速路由,无限拓展;
+* vue-rap拥有强大的缓存机制,应用支持秒级打开,边使用边下载,可以使用 vue-rap 构建流应用;
+* vue-rap可用于网站后台和移动H5网站项目的开发
+
+[查看文档](https://www.kancloud.cn/tengzhinei/vue-rap/550001)
+     
