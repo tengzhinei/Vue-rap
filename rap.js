@@ -75,6 +75,16 @@
 
     var Rap={
         install:function (Vue) {
+            Vue.mixin({
+                methods:{
+                    go:function (page) {
+                        location.href="#"+page;
+                    },
+                    back:function () {
+                        history.back();
+                    }
+                }
+            });
             Rap.init();
         },
 
