@@ -14,7 +14,12 @@ Vue-rap 可以在不使用大量前端工具(如npm,webpack,Browserify等)的情
 
 [查看文档](https://www.kancloud.cn/tengzhinei/vue-rap/550001)
 
+在线交流群 QQ群:677411689(欢迎讨论前端技术)
+
 ### DEMO
 下载源码后部署项目 然后直接访问   http://域名/example/admin.html
 
 或直接访问线上 demo http://tengzhinei.gitee.io/vue-rap/example/admin.html
+
+
+
