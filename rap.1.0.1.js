@@ -78,6 +78,11 @@
         var el=event.target;
         var link=el.getAttribute("rap-link");
         var replace=el.getAttribute("rap-replace");
+        var back=el.getAttribute("rap-back");
+        if(back=='true'){
+            Rap.back();
+            return;
+        }
         var arg=el.getAttribute("rap-arg");
         Rap.go(link,replace=='true');
     }
@@ -152,6 +157,9 @@
                     var modifiers=binding.modifiers;
                     if(modifiers.replace){
                         el.setAttribute("rap-replace", 'true');
+                    }
+                    if(modifiers.back){
+                        el.setAttribute("rap-back", 'true');
                     }
                     if(binding.arg){
                         el.setAttribute("rap-arg", binding.arg);
