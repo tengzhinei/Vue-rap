@@ -73,15 +73,104 @@
 
     var preModLoading=false;
 
+
+    function v_link_click(event,m) {
+        var el=event.target;
+        var link=el.getAttribute("rap-link");
+        var replace=el.getAttribute("rap-replace");
+        var arg=el.getAttribute("rap-arg");
+        Rap.go(link,replace=='true');
+    }
+
     var Rap={
+        config:function (config) {
+            config=Object.assign({
+                debug:false,
+                default_page:'',
+                app_version:1
+            },config);
+            Rap.debug = config.debug;
+            if(!config.default_page){
+                document.write("请配置默认页面default_page");
+                return;
+            }
+            Rap.default_page=config.default_page;
+            Rap.appVersion(config.app_version);
+            if(config.comp_version){
+                for(var key in config.comp_version){
+                    Rap.compVersion(key,config.comp_version[key]);
+                }
+            }
+            if(config.css){
+                Rap.loadCss(config.css);
+            }
+            if(config.script){
+                Rap.loadScript(config.script);
+            }
+            if(!window.Vue){
+                document.write("请在script配置Vue对应的文件路径");
+                return;
+            }
+            Rap.install(Vue);
+
+        },
+        app:function (app) {
+            if(!app){
+                app={}
+            }
+            if(!app.el){
+                app.el="#app";
+            }
+            if(!app.mixins){
+                app.mixins=[];
+            }
+            app.mixins.push(Rap.MainView);
+            new Vue(app);
+        },
+        go:function (page,replace) {
+            if(replace==null){
+                replace=false;
+            }
+            if(replace){
+                history.replaceState(null,page,"#"+page);
+                Rap.onhashchange();
+            }
+            else{
+                location.href="#"+page;
+            }
+        },
+        replace:function (page) {
+            Rap.go(page,true);
+        },
+        back:function () {
+            history.back();
+        },
         install:function (Vue) {
-            Vue.mixin({
-                methods:{
-                    go:function (page) {
-                        location.href="#"+page;
-                    },
-                    back:function () {
-                        history.back();
+            Vue.directive('link', {
+                bind: function (el, binding, vnode) {
+                    el.setAttribute("rap-link", binding.value);
+                    var modifiers=binding.modifiers;
+                    if(modifiers.replace){
+                        el.setAttribute("rap-replace", 'true');
+                    }
+                    if(binding.arg){
+                        el.setAttribute("rap-arg", binding.arg);
+                    }
+                    if(el.addEventListener) {
+                        el.addEventListener('click',v_link_click,false);
+                    }
+                    //ie使用attachEvent，来添加事件
+                    else {
+                        el.attachEvent("onclick",v_link_click);
+                    }
+                },
+                update:function (el, binding, vnode) {
+                    el.setAttribute("rap-link", binding.value);
+                },unbind:function (el, binding, vnode) {
+                    if(el.removeEventListener){
+                        el.removeEventListener("click",v_link_click,false);
+                    }else{
+                        el.detachEvent("click",v_link_click);
                     }
                 }
             });
@@ -571,7 +660,7 @@
         RapShareData.RapViews.items=items;
         RapShareData.RapViews.index++;
     });
-    window.onhashchange =Rap.onhashchange;
+    window.addEventListener("popstate", Rap.onhashchange, false);
     return Rap;
 });
 

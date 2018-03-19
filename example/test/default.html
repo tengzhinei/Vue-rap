@@ -10,10 +10,10 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <button @click="go('test/page1')"  class="btn btn-default">测试组件</button>
-            <button @click="go('test/page2')"  class="btn btn-default">测试子组件</button>
-            <button @click="go('test/page3')"  class="btn btn-default">测试 layout</button>
-            <button @click="go('test/page5')"  class="btn btn-default">测试路由的参数</button>
+            <button  v-link="'test/page1'"  class="btn btn-default">测试组件</button>
+            <button  v-link="'test/page2'"  class="btn btn-default">测试子组件</button>
+            <button  v-link="'test/page3'"  class="btn btn-default">测试 layout</button>
+            <button  v-link="'test/page5'"  class="btn btn-default">测试路由的参数</button>
             <a  href="#test/page6" class="btn btn-default">测试组件的缓存</a>
         </div>
     </div>
@@ -21,8 +21,6 @@
             <h2>Vue-Rap</h2>
             <p>   文档地址:<a target="_blank" href="https://www.kancloud.cn/tengzhinei/vue-rap/550001">https://www.kancloud.cn/tengzhinei/vue-rap/550001</a></p>
             <p>   git地址:<a target="_blank" href="https://gitee.com/tengzhinei/Vue-rap">https://gitee.com/tengzhinei/Vue-rap</a></p>
-
-
             <h3>  概述</h3>
   <p>  vue-rap 可以在不使用大量前端工具(如npm,webpack,Browserify等)的情况下快速构建基于 Vue 的大型单页面应用;</p>
 

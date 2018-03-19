@@ -16,6 +16,13 @@
 <body>
 
 <div id="app" v-cloak >
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Vue-rap单页面实例</a>
+            </div>
+        </div><!-- /.container-fluid -->
+    </nav>
     <!--childView是固定值-->
     <component v-bind:is="childView">
     </component>
@@ -26,32 +33,47 @@
 
 <script>
     //代码写在onload里防止阻塞页面渲染
-    window.onload=function() {
-        //debug模式
-        Rap.debug = true;
-        Rap.default_page='test/default';
-        //定义应用版本
-        Rap.appVersion(1);
-        Rap.compVersion("test_page6",1);
-        Rap.loadCss([
-                'bootstrap.3.3.7.min.css'
-        ]);
-        //加载依赖脚本
-        Rap.loadScript([
-            "vue.2.5.13.js"
-        ]);
-        //注册Rap
-        Vue.use(Rap);
-        //创建根控制器
-        new Vue({
-            el: '#app',
-            data: function () {
 
-            },
-            watch: {},
-            //注意需要mixins下
-            mixins: [Rap.MainView]
+    window.onload=function() {
+        Rap.config({
+            debug:true,
+            default_page:"test/default",
+            app_version:'1',
+            comp_version:{'test_page6':1},
+            css:[
+                'bootstrap.3.3.7.min.css'],
+            script:[
+                "vue.2.5.13.js"
+            ]
         });
+        Rap.app({
+            el: '#app'
+        });
+        //debug模式
+//        Rap.debug = true;
+//        Rap.default_page='test/default';
+//        //定义应用版本
+//        Rap.appVersion(1);
+//        Rap.compVersion("test_page6",1);
+//        Rap.loadCss([
+//                'bootstrap.3.3.7.min.css'
+//        ]);
+//        //加载依赖脚本
+//        Rap.loadScript([
+//            "vue.2.5.13.js"
+//        ]);
+//        //注册Rap
+//        Vue.use(Rap);
+//        //创建根控制器
+//        new Vue({
+//            el: '#app',
+//            data: function () {
+//
+//            },
+//            watch: {},
+//            //注意需要mixins下
+//            mixins: [Rap.MainView]
+//        });
     }
 </script>
 
