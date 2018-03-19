@@ -6,10 +6,10 @@
 <template>
     <div>
         <div class="btn-group" role="group" aria-label="...">
-            <a href="#test/page5" class="btn btn-default">地址1</a>
-            <a href="#test/1/page5" class="btn btn-default">地址2</a>
-            <a href="#test/2/page5?name=tengzhinei" class="btn btn-default">地址3</a>
-            <a href="#test/2111/@tengzhinei/page5/1212"  class="btn btn-default">地址4</a>
+            <a v-link.replace="'test/page5'" class="btn btn-default">地址1</a>
+            <a v-link.replace="'test/1/page5'"  class="btn btn-default">地址2</a>
+            <a v-link.replace="'test/2/page5?name=tengzhinei'"  class="btn btn-default">地址3</a>
+            <a v-link.replace="'test/2111/@tengzhinei/page5/1212'"   class="btn btn-default">地址4</a>
         </div>
         <div class="panel panel-default">
             <div class="panel-body">
