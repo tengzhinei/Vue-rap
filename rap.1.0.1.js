@@ -95,6 +95,17 @@
                 app_version:1
             },config);
             Rap.debug = config.debug;
+            this.local = config.local == true ? true : false; //本地化运行
+            if (this.local) {
+                var str = location.href;
+                str = str.indexOf("#") != -1 ? str.split("#")[0] : str;
+                var arr = str.split("/");
+                delete arr[arr.length - 1];
+                this.baseUrl = arr.join("/");
+            }
+            if(config.baseUrl){
+                this.baseUrl = config.baseUrl;
+            }
             if(!config.default_page){
                 document.write("请配置默认页面default_page");
                 return;
@@ -214,9 +225,9 @@
                     } else {
                         xhr = new ActiveXObject('MicroSoft.XMLHTTP');//IE
                     }
-                    xhr.open('get', url, false);
+                    xhr.open('get', this.baseUrl + url, false);
                     xhr.send(null);
-                    if (xhr.status == 200) {
+                    if (xhr.status == 200 || (this.local&&xhr.responseText)) {
                         content=xhr.responseText;
                         localStorage.setItem(url,content);
                         evalJS(url,content);
@@ -244,9 +255,9 @@
                     } else {
                         xhr = new ActiveXObject('MicroSoft.XMLHTTP');//IE
                     }
-                    xhr.open('get', url, false);
+                    xhr.open('get',  this.baseUrl + url, false);
                     xhr.send(null);
-                    if (xhr.status == 200) {
+                    if (xhr.status == 200 || (this.local&&xhr.responseText)) {
                         content=xhr.responseText;
                         localStorage.setItem(url,content);
                         addCss(url,content);
@@ -507,7 +518,7 @@
             }
             xhr.open('get', modUrl+'.html?version='+version, false);
             xhr.send(null);
-            if (xhr.status == 200) {
+            if (xhr.status == 200 || this.local) {
                 var el=document.createElement('div');
                 el.innerHTML=xhr.responseText;
                 var style="";
@@ -516,7 +527,20 @@
                 for(var i=0;i<el.children.length;i++) {
                     var child = el.children[i];
                     if (child.tagName == "STYLE"){
-                        style=child.innerText;
+                        if (child.getAttribute("src")) {
+                            var xhr;
+                            if (window.XMLHttpRequest) {
+                                xhr = new XMLHttpRequest(); //W3C
+                            } else {
+                                xhr = new ActiveXObject('MicroSoft.XMLHTTP'); //IE
+                            }
+                            xhr.open('get', this.baseUrl + child.getAttribute("src"), false);
+                            xhr.send(null);
+                            if (xhr.status == 200 || (this.local&&xhr.responseText)) {
+                                style = xhr.responseText;
+                            }
+                        }
+                        style += child.innerText;
                     }
                     if (child.tagName == "TEMPLATE"){
                         template=child.innerHTML;
