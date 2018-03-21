@@ -75,7 +75,7 @@
 
 
     function v_link_click(event,m) {
-        var el=event.target;
+        var el=event.currentTarget;
         var link=el.getAttribute("rap-link");
         var replace=el.getAttribute("rap-replace");
         var back=el.getAttribute("rap-back");
@@ -580,7 +580,8 @@
             }
             return m;
         },
-        onhashchange:function () {
+        onhashchange:function (e) {
+            console.log(e);
             var hash=window.location.hash;
             if(!hash&&Rap.default_page){
                 window.location.href="#"+Rap.default_page;
@@ -632,6 +633,7 @@
             index:1,
             items:[]
         },
+        router:Rap.global_router,
         childView:''
     };
 
