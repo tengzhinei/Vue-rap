@@ -41,6 +41,7 @@
         }
     }
 
+    var head = document.getElementsByTagName("head")[0];
 
     function evalScript(modUrl,url,modName,style,template,script) {
         script="(function(url,name,style,template){\n if(Rap.debug){console.log('模块加载: '+modName);}"+script+";\nRap.$create(url,name,style,template);\n})(url,modName,style,template)\n";
@@ -62,7 +63,7 @@
         style.type = 'text/css';
         style.id=id;
         style.innerHTML=content;
-        document.getElementsByTagName('HEAD').item(0).appendChild(style);
+        head.appendChild(style);
     }
 
     var layoutAndRely=[];
@@ -77,6 +78,9 @@
     function v_link_click(event,m) {
         var el=event.currentTarget;
         var link=el.getAttribute("rap-link");
+        if(!link){
+            console.log(el);
+        }
         var replace=el.getAttribute("rap-replace");
         var back=el.getAttribute("rap-back");
         if(back=='true'){
@@ -117,7 +121,6 @@
                 return;
             }
             Rap.install(Vue);
-
         },
         app:function (app) {
             if(!app){
@@ -130,7 +133,7 @@
                 app.mixins=[];
             }
             app.mixins.push(Rap.MainView);
-            new Vue(app);
+            return new Vue(app);
         },
         go:function (page,replace) {
             if(replace==null){
@@ -290,10 +293,11 @@
             Rap.isReady=true;
             localStorage.setItem('RapAppVersion',Rap.RapAppVersion);
             if(layoutAndRely.length>0){
-                for (var index in layoutAndRely){
-                    var param=layoutAndRely[index];
+                for(var i=0;i<layoutAndRely.length;i++){
+                    var param=layoutAndRely[i];
                     loadLayoutAndRely(param.url,param.rely,param.layout);
                 }
+
             }
             Rap.onhashchange();
         },
@@ -347,20 +351,14 @@
                 },
                 created: function () {
                     if(style){
-                        var el=document.createElement('style');
-                        el.id=modName;
-                        el.innerText=style;
-                        window.document.head.append(el);
+                        addCss(modName,style);
                     }
                     this.$options.RapViews.apply(this);
                 },
                 activated:function () {
                     var el=document.getElementById(modName);
                     if(style&&!el){
-                        el=document.createElement('style');
-                        el.id=modName;
-                        el.innerText=style;
-                        window.document.head.append(el)
+                        addCss(modName,style);
                     }
                 },
                 deactivated:function () {
@@ -516,7 +514,7 @@
                 for(var i=0;i<el.children.length;i++) {
                     var child = el.children[i];
                     if (child.tagName == "STYLE"){
-                        style=child.innerText;
+                        style=child.innerHTML.trim();
                     }
                     if (child.tagName == "TEMPLATE"){
                         template=child.innerHTML;
@@ -606,14 +604,13 @@
             }
             Rap.global_router.search.length=0;
             var search=Rap.$search();
-            for(var index in search){
-                var value=search[index];
+            for(var  i=0;i<search.length;i++){
+                var value=search[i];
                 if(parseInt(value)+""==value){
                     value=parseInt(value);
                 }
                 Rap.global_router.search.push(value);
             }
-
 
             Rap.loadUrl(hash);
         },
@@ -673,12 +670,3 @@
     window.addEventListener("popstate", Rap.onhashchange, false);
     return Rap;
 });
-
-
-
-
-
-
-
-
-
